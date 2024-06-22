@@ -1,6 +1,7 @@
 import express, {Application, Request, Response } from 'express';
 import { configDotenv } from 'dotenv'
 
+
 configDotenv()
 
 const app: Application = express()
@@ -17,7 +18,7 @@ app.get('/api/hello', async(req: Request, res: Response) => {
         // const clientIp:any = req.ip?.startsWith('::ffff') ? "127.0.0.1" : req.socket.remoteAddress;
         const clientIp:any = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
         console.log(req.ips)
-
+        
         if (visitor_name) {
             visitor_name = visitor_name.replace(/^"(.+(?="$))"$/, '$1'); // Remove surrounding quotes
         }
@@ -36,7 +37,9 @@ app.get('/api/hello', async(req: Request, res: Response) => {
         })
     } catch (error: any) {
         res.status(500).json({
-            error: error.message
+            error: error.message,
+            name: error.name,
+            stack: error.stack
         })
     }
 
