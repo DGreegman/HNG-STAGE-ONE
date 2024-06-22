@@ -20,11 +20,18 @@ app.get('/api/hello', async(req: Request, res: Response) => {
         if (visitor_name) {
             visitor_name = visitor_name.replace(/^"(.+(?="$))"$/, '$1'); // Remove surrounding quotes
         }
+
+        if(!visitor_name) {
+           return res.status(400).json({
+                error: "Please provide a visitor name"
+            })
+            
+        }
         
         // response
         res.status(200).json({
-            visitor_name: visitor_name,
-            clientIp: clientIp
+            clientIp: clientIp,
+            greeting: `Hello, ${visitor_name}!`
         })
     } catch (error: any) {
         res.status(500).json({
