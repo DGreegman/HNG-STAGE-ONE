@@ -14,7 +14,7 @@ app.get('/api/hello', async(req: Request, res: Response) => {
 
     try {
         let visitor_name = req.query.visitor_name  as string;
-        const clientIp = req.ip?.startsWith('::ffff') ? "127.0.0.1" : req.ip;
+        const clientIp = req.ip?.startsWith('::ffff') ? "127.0.0.1" : req.socket.remoteAddress;
         // const clientIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
 
         if (visitor_name) {
