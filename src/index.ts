@@ -89,16 +89,25 @@ app.listen(port, () => {
     app.set("trust proxy", true);
     
     app.get('/api/hello', async (req: Request, res: Response) => {
-        const visitor_name = req.query.visitor_name || 'visitor';
+        let visitor_name = req.query.visitor_name as string;
         const ip = (req.headers['x-forwarded-for'] || req.socket.remoteAddress) as string;
-
+                
        try {
         const response =    await fetch(`https://api.geoapify.com/v1/ipinfo?&apiKey=${ip_key}`)
         const result = await response.json()
         const lat = result.location.latitude
         const log = result.location.longitude
         console.log(result.city.name, result.ip, lat, log);
-        
+        if (visitor_name) {
+            visitor_name = visitor_name.replace(/^"(.+(?="$))"$/, '$1'); // Remove surrounding quotes
+        }
+
+        if(!visitor_name) {
+           return res.status(400).json({
+                error: "Please provide a visitor name"
+            })
+            
+        }
         // const weather_response = await fetch(`http://api.weatherapi.com/v1/current.json?key=${weather_key}&q=${lat},${log}`)
         try {
             const weather_response = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${log}&appid=${process.env.API_KEY}`)
