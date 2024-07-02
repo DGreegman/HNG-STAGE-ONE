@@ -15,14 +15,16 @@ app.set("trust proxy", true);
 
 app.get('/api/hello', async(req: Request, res: Response) => {
     const ip = '197.210.203.2'
+    // const ip = '10.206.42.51'
+
 
     
 
     try {
         const clientIp:any = req.ip?.startsWith('::ffff') ? "127.0.0.1" : req.socket.remoteAddress;
-        const geo = geoip.lookup(clientIp);
-        console.log(geo);
-        const weather = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${geo?.ll[0]}.34&lon=${geo?.ll[1]}.99&appid=9c821d71d8fb0dccd3e4e4d3c5fe3f5b`)
+        const geo = geoip.lookup(ip);
+        console.log(geo?.city);
+        const weather = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${geo?.ll[0]}&lon=${geo?.ll[1]}&appid=${process.env.API_KEY}`)
         const result = await weather.json()
         
         let visitor_name = req.query.visitor_name  as string;
