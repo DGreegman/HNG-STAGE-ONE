@@ -22,7 +22,7 @@ app.get('/api/hello', async(req: Request, res: Response) => {
 
     try {
         const clientIp:any = req.ip?.startsWith('::ffff') ? "127.0.0.1" : req.socket.remoteAddress;
-        const geo = geoip.lookup(ip);
+        const geo = geoip.lookup(clientIp);
         console.log(geo?.city);
         const weather = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${geo?.ll[0]}&lon=${geo?.ll[1]}&appid=${process.env.API_KEY}`)
         const result = await weather.json()

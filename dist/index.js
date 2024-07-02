@@ -26,7 +26,7 @@ app.get('/api/hello', (req, res) => __awaiter(void 0, void 0, void 0, function* 
     // const ip = '10.206.42.51'
     try {
         const clientIp = ((_a = req.ip) === null || _a === void 0 ? void 0 : _a.startsWith('::ffff')) ? "127.0.0.1" : req.socket.remoteAddress;
-        const geo = geoip.lookup(ip);
+        const geo = geoip.lookup(clientIp);
         console.log(geo === null || geo === void 0 ? void 0 : geo.city);
         const weather = yield fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${geo === null || geo === void 0 ? void 0 : geo.ll[0]}&lon=${geo === null || geo === void 0 ? void 0 : geo.ll[1]}&appid=${process.env.API_KEY}`);
         const result = yield weather.json();
